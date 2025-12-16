@@ -8,11 +8,11 @@ data2 = data2.T
 #construire X et y pour la régression
 q = 10
 n2 = 100
-X2 = np.zeros((n2, q))
+X2 = np.ones((n2, q+1))
 y2 = np.zeros((n2,1))
 for i in range(n2):
     for j in range(q):
-        X2[i, j] = (data2[i, 0])**(j+1)
+        X2[i, j+1] = (data2[i, 0])**(j+1)
     y2[i] = data2[i, 1]
 
 beta2 = np.linalg.inv(X2.T @ X2) @ X2.T @ y2
@@ -20,7 +20,10 @@ beta2 = np.linalg.inv(X2.T @ X2) @ X2.T @ y2
 f2 = np.zeros((n2, 1))
 for i in range(q):
     for j in range(n2):
-        f2[j] += beta2[i]*X2[j,i]
+        f2[j] += beta2[i+1]*X2[j,i+1]
+
+for i in range(n2):
+    f2[i] += beta2[0]
 
 x2 = data2[:, 0]
 indices2 = np.argsort(x2)
