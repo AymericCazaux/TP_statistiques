@@ -20,12 +20,9 @@ beta3 = np.linalg.inv((X3.T @ X3) + n3*lam*np.eye(q+1)) @ X3.T @ y3
 
 #f3 = beta3[0] + beta3[1]*data3[:, 0]
 f3 = np.zeros((n3, 1))
-for i in range(q):
+for i in range(q+1):
     for j in range(n3):
-        f3[j] += beta3[i+1]*X3[j,i+1]
-
-for i in range(n3):
-    f3[i] += beta3[0]
+        f3[j] += beta3[i]*X3[j,i]
 
 x3 = data3[:, 0]
 indices3 = np.argsort(x3)
@@ -39,5 +36,5 @@ plt.scatter(data3[:, 0], data3[:, 1], s=1)
 plt.plot(x3, f3, color='red')
 plt.xlabel("X")
 plt.ylabel("Y")
-plt.title("data1 (nuages de points et regression (linéaire))")
+plt.title("data3 (nuages de points et regression (Ridge / polynomiale))")
 plt.show()
