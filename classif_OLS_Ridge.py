@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.linalg as la
 import numpy.random as rnd
+from sklearn.linear_model import LogisticRegression
 ###############################################################################
 
 ################################################################################
@@ -14,9 +15,9 @@ import numpy.random as rnd
 p=2
 n=600
 # Proportion of sample from classes 0, 1, and outliers
-p0 = 3/6
+p0 = 2/6
 p1 = 2/6
-pout = 1/6
+pout = 2/6
 # Examples of means/covariances of classes 0, 1 and outliers
 mu0 = np.array([-2,-2])
 mu1 = np.array([2,2])
@@ -30,7 +31,7 @@ Sigma0 = Sigma_ex1
 Sigma1 = Sigma_ex1
 Sigmaout = Sigma_ex1
 # Regularization coefficient
-lamb = 1
+lamb = 0.1
 ################################################################################
 
 ################################################################################
@@ -75,6 +76,12 @@ beta_ols = np.linalg.inv(X.T @ X) @ X.T @ y
 I = np.eye(p+1) 
 beta_ridge = np.linalg.inv(X.T @ X + lamb*n * I) @ X.T @ y
 
+#Calcul des coefficiants logistiques
+X_log = X[:, 1:]
+logreg = LogisticRegression(penalty='l2', C=1/lamb, fit_intercept=True)
+logreg.fit(X_log, y)
+beta_log = np.concatenate([logreg.intercept_, logreg.coef_[0]])
+
 # Fonction pour tracer l'hyperplan
 def plot_hyperplane(ax, beta, color, label, linestyle='-'):
     beta0 = beta[0] 
@@ -92,10 +99,11 @@ def plot_hyperplane(ax, beta, color, label, linestyle='-'):
 # Tracer les hyperplans
 plot_hyperplane(ax, beta_ols, 'green', 'OLS')
 plot_hyperplane(ax, beta_ridge, 'orange', f'Ridge ($\lambda={lamb}$)', linestyle='--')
+plot_hyperplane(ax, beta_log, 'red', f'Logistic regression ($\lambda={lamb}$)', linestyle='--')
 
 # Réglages du graphique
 ax.set_title(f"Classification OLS vs Ridge (n={n}, Outliers={nout})")
 ax.legend(loc="upper left")
-ax.set_ylim([-15, 10]) # Ajuster selon la position des outliers
+ax.set_ylim([-15, 10])
 ax.grid(True)
 plt.show()
