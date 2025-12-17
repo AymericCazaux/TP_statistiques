@@ -6,7 +6,7 @@ data2 = data2.T
 
 #data2
 #construire X et y pour la régression
-q = 10
+q = 2
 n2 = 100
 X2 = np.ones((n2, q+1))
 y2 = np.zeros((n2,1))

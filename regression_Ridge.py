@@ -7,7 +7,7 @@ data3 = data3.T
 #data3
 #construire X et y pour la régression
 n3 = 20
-lam = 100
+lam = 1
 q = 10
 X3 = np.ones((n3, q+1))
 y3 = np.zeros((n3,1))
